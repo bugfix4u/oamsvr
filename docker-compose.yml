@@ -1,0 +1,35 @@
+version: '3.6'
+
+networks:
+   oam-network:
+      name: "oam-network"
+      driver: "bridge"
+
+services:
+   oam-postgres:
+      image: postgres:12.1
+      container_name: oam-postgres
+      hostname: oam-postgres
+      tty: true
+      stdin_open: true
+      restart: always
+      networks:
+         - oam-network
+      environment:
+         POSTGRES_DB: oamdb
+         POSTGRES_USER: oamuser
+         POSTGRES_PASSWORD: H1r3M3N0W
+      ports:
+         - 5432:5432
+
+   oam-apisvr:
+      build: .
+      container_name: oam-apisvr
+      hostname: oam-apisvr
+      tty: true
+      stdin_open: true
+      restart: always
+      networks:
+         - oam-network
+      ports:
+         - 8443:8443

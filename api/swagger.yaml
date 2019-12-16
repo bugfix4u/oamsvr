@@ -1,0 +1,518 @@
+swagger: "2.0"
+info:
+  description: "Defines the API's for the example Online Account Manager API server"
+  version: "1.0.0"
+  title: "Online Account Manager API"
+  contact:
+    email: "dchambers@bugfixer.net"
+  license:
+    name: "GPL v3"
+    url: "http://www.gnu.org/licenses/gpl-3.0.html"
+host: "localhost"
+basePath: "/v1"
+tags:
+- name: "account"
+  description: "Operations for Accounts"
+- name: "user"
+  description: "Admin users"
+- name: "authenticate"
+  description: "Login API"
+
+schemes:
+- "https"
+paths:
+  /accounts:
+    get:
+      tags:
+      - "account"
+      summary: "Get all accounts"
+      description: ""
+      operationId: "getAccounts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/account"
+        401:
+          description: "Unauthorized"
+    post:
+      tags:
+      - "account"
+      summary: "Add a new account to the DB"
+      description: ""
+      operationId: "addAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Account that needs to be added to the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/createaccount"
+      responses:
+        201:
+          description: "Created"
+          schema:
+              $ref: "#/definitions/account"
+        400:
+          description: "Invalid JSON format"
+        401:
+          description: "Unauthorized"
+        405:
+          description: "Invalid input"
+          schema:
+              $ref: "#/definitions/arrayoferrors"
+            
+  /account/{id}:
+    get:
+      tags:
+      - "account"
+      summary: "Get an account by id"
+      description: ""
+      operationId: "getAccountById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the account to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+              $ref: "#/definitions/account"
+        400:
+          description: "Invalid ID"
+        401:
+          description: "Unauthorized"
+        404:
+          description: "Account not found"
+    put:
+      tags:
+      - "account"
+      summary: "Modify an account in the DB"
+      description: ""
+      operationId: "modifyAccountById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the account to return"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Account that needs to be added to the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/createaccount"
+      responses:
+        200:
+          description: "OK"
+          schema:
+              $ref: "#/definitions/account"
+        400:
+          description: "Invalid ID or Invalid JSON format"
+        401:
+          description: "Unauthorized"
+        404:
+          description: "Account not found"
+        405:
+          description: "Invalid input"
+          schema:
+              $ref: "#/definitions/arrayoferrors"
+    delete:
+      tags:
+      - "account"
+      summary: "Delete Account"
+      description: ""
+      operationId: "deleteAccountById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Account id that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Invalid ID"
+        401:
+          description: "Unauthorized"
+  /users:
+    get:
+      tags:
+      - "user"
+      summary: "Get all users"
+      description: ""
+      operationId: "getUsers"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/user"
+        401:
+          description: "Unauthorized"
+    post:
+      tags:
+      - "user"
+      summary: "Add a new user to the DB"
+      description: ""
+      operationId: "addUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User that needs to be added to the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/createuser"
+      responses:
+        201:
+          description: "Created"
+          schema:
+              $ref: "#/definitions/user"
+        400:
+          description: "Invalid JSON format"
+        401:
+          description: "Unauthorized"
+        405:
+          description: "Invalid input"
+          schema:
+              $ref: "#/definitions/arrayoferrors"
+  /user/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by id"
+      description: ""
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the user to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: "#/definitions/user"
+        400:
+          description: "Invalid ID"
+        401:
+          description: "Unauthorized"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Modify a user in the DB"
+      description: ""
+      operationId: "modifyUserId"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the user to modify"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "User that needs to be added to the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/createuser"
+      responses:
+        200:
+          description: "OK"
+          schema:
+              $ref: "#/definitions/user"
+        400:
+          description: "Invalid ID or Invalid JSON format"
+        401:
+          description: "Unauthorized"
+        404:
+          description: "User not found"
+        405:
+          description: "Invalid input"
+          schema:
+              $ref: "#/definitions/arrayoferrors"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: ""
+      operationId: "deleteUserById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User id that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Invalid ID"
+        401:
+          description: "Unauthorized"
+  /authenticate:
+    post:
+      tags:
+      - "authenticate"
+      summary: "Authenticate a user"
+      description: ""
+      operationId: "authenticateUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Username and password that needs to be authenticated"
+        required: true
+        schema:
+          $ref: "#/definitions/login"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: "#/definitions/token"
+        400:
+          description: "Invalid JSON format"
+        401:
+          description: "Unauthorized"
+        405:
+          description: "Invalid input"
+          schema:
+              $ref: "#/definitions/arrayoferrors"
+definitions:
+  account:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+        format: "utf-8"
+      url:
+        type: "string"
+        format: "url"
+      username:
+        type: "string"
+        format: "utf-8"
+      password:
+        type: "string"
+        format: "password"
+      questions:
+        type: "array"
+        items:
+          $ref: "#/definitions/securityquestion"
+      description:
+        type: "string"
+        format: "text"
+      tags:
+        type: "string"
+        format: "text"
+  createaccount:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        format: "utf-8"
+      url:
+        type: "string"
+        format: "url"
+      username:
+        type: "string"
+        format: "utf-8"
+      password:
+        type: "string"
+        format: "password"
+      questions:
+        type: "array"
+        items:
+          $ref: "#/definitions/createsecurityquestion"
+      description:
+        type: "string"
+        format: "text"
+      tags:
+        type: "string"
+        format: "text"
+    required:
+    - "name"
+    - "username"
+    - "password"
+  securityquestion:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+        format: "utf-8"
+      accountId:
+        type: "string"
+        format: "uuid"
+      question:
+        type: "string"
+        format: "utf-8"
+      answer:
+        type: "string"
+        format: "utf-8"
+      description:
+        type: "string"
+        format: "text"
+      tags:
+        type: "string"
+        format: "text"
+  createsecurityquestion:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        format: "utf-8"
+      accountId:
+        type: "string"
+        format: "uuid"
+      question:
+        type: "string"
+        format: "utf-8"
+      answer:
+        type: "string"
+        format: "utf-8"
+      description:
+        type: "string"
+        format: "text"
+      tags:
+        type: "string"
+        format: "text"
+    required:
+      - "name"
+      - "question"
+      - "answer"
+  user:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+        format: "utf-8"
+      username:
+        type: "string"
+        format: "utf-8"
+      password:
+        type: "string"
+        format: "password"
+      role:
+        type: "string"
+        format: "text"
+        enum: [superuser, admin]
+      email:
+        type: "string"
+        format: "email"
+      status:
+        type: "string"
+        format: "text"
+        enum: [enabled, disabled, locked]
+      lsl:
+        type: "string"
+        format: "date-time"
+      description:
+        type: "string"
+        format: "text"
+      tags:
+        type: "string"
+        format: "text"
+  createuser:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        format: "utf-8"
+      username:
+        type: "string"
+        format: "utf-8"
+      password:
+        type: "string"
+        format: "password"
+      role:
+        type: "string"
+        format: "text"
+        enum: [superuser, admin]
+      email:
+        type: "string"
+        format: "email"
+      description:
+        type: "string"
+        format: "text"
+      tags:
+        type: "string"
+        format: "text"
+    required:
+    - "name"
+    - "username"
+    - "password"
+    - "role"
+  login:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        format: "utf-8"
+      password:
+        type: "string"
+        format: "password"
+  token:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        format: "text"
+  arrayoferrors:
+    type: "object"
+    properties:
+      errors:
+          type: array
+          items:
+            type: "string"
+            format: "utf-8"
+            example: "error1, error2, error3"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
